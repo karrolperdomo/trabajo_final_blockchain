@@ -1,0 +1,96 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package sistemavotos;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ */
+public class ManejoVotos {
+    
+    static String[] candidatos = new String[3];
+    
+    int[] VotosCandidatos = new int[3];
+    int columnas = 2;
+    static int filas = 1;
+    static String[][] registrosVotos;
+    
+    public String[] getCandidatos() {
+        return candidatos;
+    }
+     
+    public void crearRegistroVotos(){
+        registrosVotos = new String[filas][columnas];
+    }
+    public void crearCandidatos() {
+        
+        candidatos[0] = "Angie Forero";
+        candidatos[1] = "Karol Perdomo";
+        candidatos[2] = "Alejandro Cachón";     
+    }
+    
+    
+    public boolean agregarVoto(String identificacion, int NumeroCandidato){
+        
+        boolean estadoRegistro = true;
+        
+        // buscar que no esta registrada la identificacion en la matriz
+        for(int i = 0; i<filas; i++) {
+            if (registrosVotos[i][0] != null) {
+            
+                if (registrosVotos[i][0].equalsIgnoreCase(identificacion)) {
+                    estadoRegistro = false;
+                    i = filas + 1;
+                }
+            }
+        }
+        
+        if (estadoRegistro == true) { // no encontro el numero de identificacion
+            // procedemos a registrar el voto
+            
+            registrosVotos[filas-1][0] = identificacion;
+            registrosVotos[filas-1][1] = candidatos[NumeroCandidato];
+            aumentarMatriz();
+        }
+        
+        return estadoRegistro;
+    }
+    
+    public void aumentarMatriz(){
+        
+        String[][] matrizTemp = new String[filas + 1][columnas];
+        for(int i = 0; i<filas; i++) {
+            for(int j= 0; j< columnas; j++) {
+                matrizTemp[i][j] = registrosVotos[i][j];
+            }
+        }
+        registrosVotos = matrizTemp;
+        filas++;
+    }
+    
+    public void imprimirVotos(){
+        for(int i = 0; i<filas; i++) {
+            for(int j= 0; j< columnas; j++) {
+                System.out.print("--" + registrosVotos[i][j]);
+            }
+            System.out.println();
+        }
+    }
+    
+    public int[] conteoVotos(){
+        for(int i = 0; i<filas; i++) {
+            String nombreCandidato = registrosVotos[i][1];
+            for(int j = 0; j < candidatos.length; j++) {
+                if (nombreCandidato == candidatos[j]) {
+                    VotosCandidatos[j]++;
+                }
+            }
+        }
+        return VotosCandidatos;
+    }
+}
